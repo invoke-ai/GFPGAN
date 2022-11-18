@@ -84,7 +84,8 @@ class GFPGANer():
             save_ext='png',
             use_parse=True,
             device=self.device,
-            model_rootpath='models/gfpgan/weights')
+            model_rootpath=os.path.join(os.path.dirname(model_path),'weights')
+        )
 
         if model_path.startswith('https://'):
             model_path = load_file_from_url(
