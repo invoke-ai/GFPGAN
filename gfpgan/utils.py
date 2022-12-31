@@ -32,6 +32,7 @@ class GFPGANer():
     def __init__(self, model_path, upscale=2, arch='clean', channel_multiplier=2, bg_upsampler=None, device=None):
         self.upscale = upscale
         self.bg_upsampler = bg_upsampler
+        self.rootpath = os.path.dirname(model_path)
 
         # initialize model
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') if device is None else device
@@ -84,11 +85,11 @@ class GFPGANer():
             save_ext='png',
             use_parse=True,
             device=self.device,
-            model_rootpath='models/gfpgan/weights')
+            model_rootpath=os.path.join(self.rootpath,'weights'))
 
         if model_path.startswith('https://'):
             model_path = load_file_from_url(
-                url=model_path, model_dir=os.path.join(ROOT_DIR, 'models/gfpgan/weights'), progress=True, file_name=None)
+                url=model_path, model_dir=os.path.join(ROOT_DIR, os.path.join(self.rootpath,'weights')), progress=True, file_name=None)
         loadnet = torch.load(model_path)
         if 'params_ema' in loadnet:
             keyname = 'params_ema'
